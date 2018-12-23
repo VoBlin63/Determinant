@@ -4,6 +4,7 @@ import android.graphics.Color
 import android.util.Log
 import ru.buryachenko.SIZE
 import java.lang.StringBuilder
+import java.util.function.BinaryOperator
 
 class AtomMatrix {
     val matrix =  ArrayList<Atom>(SIZE*SIZE)
@@ -68,6 +69,24 @@ class AtomMatrix {
 
     fun quadrant(row: Int, col: Int):Int {
         val res = (col-1) / 3 + ((row-1)/3)*(SIZE/3)
+        return res
+    }
+
+    fun aloneNumber(atom: Atom): Int {
+        var res = 0
+        if (atom.number == 0) {
+            val possibleList = getPossible(atom.row, atom.col)
+            val localMatrix = matrix.filter {
+                (quadrant(it.row, it.col) == quadrant(atom.row, atom.col)) && ((it.row != atom.row) && (it.col != atom.col))
+            }
+            possibleList.forEach { ourNum ->
+                var existInOthers = false
+                localMatrix.forEach { if (ourNum in getPossible(it.row, it.col)) existInOthers = true }
+                if (!existInOthers)
+                    res = ourNum
+                //может быть только один
+            }
+        }
         return res
     }
 

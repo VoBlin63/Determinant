@@ -115,20 +115,35 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
 
     fun refreshMatrix() {
+        var needRefresh = false
         viewModel.field.matrix.forEach{
             val item = findViewById<TextView>(makeId(it.row, it.col))
             if (it.number == 0) {
                 val listPossible = viewModel.field.getPossible(it.row, it.col)
+                if (listPossible.size == 1) {
+                    viewModel.field.setNumber(it.row, it.col, listPossible.first())
+                    needRefresh = true
+                }
+                if(viewModel.field.aloneNumber(it) > 0) {
+                    viewModel.field.setNumber(it.row, it.col, viewModel.field.aloneNumber(it))
+                    needRefresh = true
+                }
+            }
+
+            if (it.number == 0) {
+                val listPossible = viewModel.field.getPossible(it.row, it.col)
                 item.text = viewModel.field.possibleStr(listPossible)
                 setStylePossibleNumbers(item)
-                if (listPossible.size == 1)
-                    item.setTextColor(Color.RED)
+//                if ((listPossible.size == 1) || (viewModel.field.aloneNumber(it) > 0))
+//                    item.setTextColor(Color.RED)
             }
             else {
                 item.text = it.number.toString()
                 setStyleDefinedNumber(item)
             }
         }
+        if (needRefresh)
+            refreshMatrix()
     }
 
     private fun makeId(row: Int, col: Int) = 1000 + row * 100 + col
