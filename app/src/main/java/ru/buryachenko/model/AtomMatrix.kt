@@ -6,15 +6,14 @@ import java.lang.StringBuilder
 
 class AtomMatrix {
     val matrix =  ArrayList<Atom>(SIZE*SIZE)
-    val possibleNumbers = ArrayList<MutableSet<Int>>(SIZE*SIZE)
-
+//    val possibleNumbers = ArrayList<MutableSet<Int>>(SIZE*SIZE)
 
     init {
         for (row in 1..SIZE)
             for (col in 1..SIZE)
                 matrix.add(Atom(row, col))
-        setNumber(1,3,5)
-        setNumber(1,4,3)
+//        setNumber(1,3,5)
+//        setNumber(1,4,3)
     }
 
 
@@ -50,9 +49,11 @@ class AtomMatrix {
 
     fun possibleStr(possible: Set<Int>): String {
         var tmp = StringBuilder("")
-        fullStackNumbers().forEach { tmp = tmp.append(if (possible.contains(it)) it.toString() else " " ) }
+        fullStackNumbers().sortedBy { it }.forEach { tmp = tmp.append(if (possible.contains(it)) it.toString() else " " ) }
         return tmp.toString()
     }
+
+    fun possibleStr(atom: Atom ) = possibleStr(getPossible(atom.row, atom.col))
 
     private fun fullStackNumbers(): MutableSet<Int> {
         val res = HashSet<Int>()
