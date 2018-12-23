@@ -1,5 +1,6 @@
 package ru.buryachenko.model
 
+import android.graphics.Color
 import android.util.Log
 import ru.buryachenko.SIZE
 import java.lang.StringBuilder
@@ -9,11 +10,13 @@ class AtomMatrix {
 //    val possibleNumbers = ArrayList<MutableSet<Int>>(SIZE*SIZE)
 
     init {
-        for (row in 1..SIZE)
-            for (col in 1..SIZE)
+        for (row in 1..SIZE) {
+            for (col in 1..SIZE) {
                 matrix.add(Atom(row, col))
-//        setNumber(1,3,5)
-//        setNumber(1,4,3)
+                print(" ${quadrant(row,col)} ")
+            }
+            println("")
+        }
     }
 
 
@@ -24,9 +27,11 @@ class AtomMatrix {
 
     fun getPossible(row: Int, col: Int): MutableSet<Int> {
         val res = fullStackNumbers()
-        matrix.forEach {
-            if ((it.number > 0)
-                && ((it.col == col) || (it.row == row)))
+        val thisQuadrant = quadrant(row, col)
+        matrix.filter { it.number > 0 }.forEach {
+            if (((it.col == col) || (it.row == row)))
+                res.remove(it.number)
+            if (thisQuadrant == quadrant(it.row, it.col))
                 res.remove(it.number)
         }
         return res
@@ -60,4 +65,10 @@ class AtomMatrix {
         for (i in 1..SIZE) res.add(i)
         return res
     }
+
+    fun quadrant(row: Int, col: Int):Int {
+        val res = (col-1) / 3 + ((row-1)/3)*(SIZE/3)
+        return res
+    }
+
 }
