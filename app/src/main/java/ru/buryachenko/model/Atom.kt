@@ -5,6 +5,7 @@ import java.lang.StringBuilder
 
 data class Atom(val row: Int, val col: Int) {
     var number: Int = 0
+    var auto = false
     val possible = HashSet<Int>()
     val quadrant
         get() = quadrant(row, col)
@@ -18,9 +19,15 @@ data class Atom(val row: Int, val col: Int) {
     val possibleStr
         get():String {
             var tmp = StringBuilder("")
-            possible.forEach {tmp = tmp.append("$it")}
+            if (possible.size == SIZE)
+                tmp = StringBuilder(".........")
+            else
+                possible.forEach {tmp = tmp.append("$it")}
             return tmp.toString()
         }
+
+    val id
+        get() = makeId(row, col)
 
     init {
         reset()
@@ -29,7 +36,7 @@ data class Atom(val row: Int, val col: Int) {
 
 fun quadrant(row: Int, col: Int) = (col - 1) / 3 + ((row - 1) / 3) * (SIZE / 3)
 fun makeId(row: Int, col: Int) = 1000 + row * 100 + col
-fun defineRow(id: Int) = (id - 1000) / 100
-fun defineCol(id: Int) = (id - 1000) % 100
-fun fullStackNumbers() = Atom(0,0).possible
+//fun defineRow(id: Int) = (id - 1000) / 100
+//fun defineCol(id: Int) = (id - 1000) % 100
+//fun fullStackNumbers() = Atom(0,0).possible
 
