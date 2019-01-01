@@ -2,27 +2,39 @@ package ru.buryachenko.model
 
 import ru.buryachenko.SIZE
 import java.lang.StringBuilder
+import java.util.*
+import kotlin.collections.HashSet
 
 data class Atom(val row: Int, val col: Int) {
     var number: Int = 0
     var auto = false
-    val possible = HashSet<Int>()
+    val bannedFrom = HashMap<Int, Int>()
+
     val quadrant
         get() = quadrant(row, col)
 
+    val possible: HashSet<Int>
+        get() {
+            var res = fullStack()
+            bannedFrom.forEach { res.remove(it.value)}
+            return res
+        }
+
     fun reset() {
         number = 0
-        possible.clear()
-        for (i in 1..SIZE) possible.add(i)
+//        possible.clear()
+        bannedFrom.clear()
+//        for (i in 1..SIZE) possible.add(i)
     }
 
     val possibleStr
         get():String {
             var tmp = StringBuilder("")
             if (possible.size == SIZE)
-                tmp = StringBuilder(".........")
+                tmp = StringBuilder("         ")
             else
-                possible.forEach {tmp = tmp.append("$it")}
+                possible.sortedBy { it }.forEach {tmp = tmp.append("$it")}
+//                fullStack().sortedBy { it }.forEach { tmp = tmp.append( if (possible.contains(it)) "$it" else " ") }
             return tmp.toString()
         }
 
@@ -36,6 +48,11 @@ data class Atom(val row: Int, val col: Int) {
 
 fun quadrant(row: Int, col: Int) = (col - 1) / 3 + ((row - 1) / 3) * (SIZE / 3)
 fun makeId(row: Int, col: Int) = 1000 + row * 100 + col
+fun fullStack(): HashSet<Int> {
+    val res = HashSet<Int>()
+    for (i in 1..SIZE) res.add(i)
+    return res
+}
 //fun defineRow(id: Int) = (id - 1000) / 100
 //fun defineCol(id: Int) = (id - 1000) % 100
 //fun fullStackNumbers() = Atom(0,0).possible

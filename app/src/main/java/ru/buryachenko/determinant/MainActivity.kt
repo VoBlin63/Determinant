@@ -7,10 +7,12 @@ import android.os.Bundle
 import android.support.constraint.ConstraintLayout
 import android.support.v7.app.AppCompatActivity
 import android.support.constraint.ConstraintSet
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import ru.buryachenko.LOGTAG
 import ru.buryachenko.SIZE
 import ru.buryachenko.model.makeId
 import ru.buryachenko.viewmodel.MatrixModel
@@ -43,6 +45,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 picture.text = viewModel.matrix[picture.id]!!.possibleStr
                 setStylePossibleNumbers(picture)
                 picture.setOnClickListener(this)
+                picture.setOnLongClickListener {doLongClick(picture)}
                 picture.setBackgroundColor(colorBackgroundByQadrant(picture.id))
                 //picture.setBackgroundColor(resources.getColor(if ((row + col) % 2 == 0) R.color.colorBackgroundFirst else R.color.colorBackgroundSecond))
                 mainView.addView(picture)
@@ -87,9 +90,14 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     override fun onClick(v: View?) {
-        if (v != null) {
+        if (v != null)
             doClick(v.id)
-        }
+    }
+
+    private fun doLongClick(v: View): Boolean {
+        viewModel.setNumber(v.id,0)
+        refreshMatrix()
+        return true
     }
 
     private fun doClick(id: Int) {
@@ -140,7 +148,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                     item.setTextColor(Color.RED)
             }
         }
-        findViewById<TextView>(clickedCellID).setBackgroundColor(Color.GREEN)
+        if (clickedCellID > 0)
+            findViewById<TextView>(clickedCellID).setBackgroundColor(Color.GREEN)
         if (needRefresh)
             refreshMatrix()
     }
