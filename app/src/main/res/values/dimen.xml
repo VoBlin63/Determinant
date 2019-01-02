@@ -2,4 +2,6 @@
 <resources>
     <dimen name="cellHeight">51sp</dimen>
     <dimen name="cellWidth">35sp</dimen>
+    <dimen name="cellCornerRadius">3sp</dimen>
+    <dimen name="cellBorderWidth">1sp</dimen>
 </resources>

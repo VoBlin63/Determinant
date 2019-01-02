@@ -22,9 +22,7 @@ data class Atom(val row: Int, val col: Int) {
 
     fun reset() {
         number = 0
-//        possible.clear()
         bannedFrom.clear()
-//        for (i in 1..SIZE) possible.add(i)
     }
 
     val possibleStr
@@ -34,7 +32,6 @@ data class Atom(val row: Int, val col: Int) {
                 tmp = StringBuilder("         ")
             else
                 possible.sortedBy { it }.forEach {tmp = tmp.append("$it")}
-//                fullStack().sortedBy { it }.forEach { tmp = tmp.append( if (possible.contains(it)) "$it" else " ") }
             return tmp.toString()
         }
 
@@ -53,7 +50,3 @@ fun fullStack(): HashSet<Int> {
     for (i in 1..SIZE) res.add(i)
     return res
 }
-//fun defineRow(id: Int) = (id - 1000) / 100
-//fun defineCol(id: Int) = (id - 1000) % 100
-//fun fullStackNumbers() = Atom(0,0).possible
-

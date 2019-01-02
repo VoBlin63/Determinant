@@ -7,12 +7,9 @@ import android.os.Bundle
 import android.support.constraint.ConstraintLayout
 import android.support.v7.app.AppCompatActivity
 import android.support.constraint.ConstraintSet
-import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
-import ru.buryachenko.LOGTAG
 import ru.buryachenko.SIZE
 import ru.buryachenko.model.makeId
 import ru.buryachenko.viewmodel.MatrixModel
@@ -37,31 +34,31 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         for (row in 1..SIZE) {
             var benchMark = ConstraintSet.PARENT_ID
             for (col in 1..SIZE) {
-                val picture = TextView(this)
-                picture.id = makeId(row, col)
+                val cell = TextView(this)
+                cell.id = makeId(row, col)
 
-                picture.width = resources.getDimensionPixelSize(R.dimen.cellWidth)
-                picture.height = resources.getDimensionPixelSize(R.dimen.cellHeight)
-                picture.text = viewModel.matrix[picture.id]!!.possibleStr
-                setStylePossibleNumbers(picture)
-                picture.setOnClickListener(this)
-                picture.setOnLongClickListener {doLongClick(picture)}
-                picture.setBackgroundColor(colorBackgroundByQadrant(picture.id))
-                //picture.setBackgroundColor(resources.getColor(if ((row + col) % 2 == 0) R.color.colorBackgroundFirst else R.color.colorBackgroundSecond))
-                mainView.addView(picture)
+                cell.width = resources.getDimensionPixelSize(R.dimen.cellWidth)
+                cell.height = resources.getDimensionPixelSize(R.dimen.cellHeight)
+                cell.text = viewModel.matrix[cell.id]!!.possibleStr
+                setStylePossibleNumbers(cell)
+                cell.setOnClickListener(this)
+                cell.setOnLongClickListener {doLongClick(cell)}
+                cell.setBackgroundColor(colorBackgroundByQadrant(cell.id))
+//                cell.background = resources.getDrawable(R.drawable.cell_tile)
+                mainView.addView(cell)
                 set.clone(mainView)
-                set.clear(picture.id, ConstraintSet.TOP)
-                set.clear(picture.id, ConstraintSet.LEFT)
-                set.connect(picture.id, ConstraintSet.TOP, benchMark, ConstraintSet.TOP, 0)
+                set.clear(cell.id, ConstraintSet.TOP)
+                set.clear(cell.id, ConstraintSet.LEFT)
+                set.connect(cell.id, ConstraintSet.TOP, benchMark, ConstraintSet.TOP, 0)
                 if (benchMark == ConstraintSet.PARENT_ID) {
-                    set.connect(picture.id, ConstraintSet.TOP, benchMark, ConstraintSet.TOP, (row - 1) * resources.getDimensionPixelSize(R.dimen.cellHeight))
+                    set.connect(cell.id, ConstraintSet.TOP, benchMark, ConstraintSet.TOP, (row - 1) * resources.getDimensionPixelSize(R.dimen.cellHeight))
                 }
                 else {
-                    set.connect(picture.id, ConstraintSet.TOP, benchMark, ConstraintSet.TOP, 0)
-                    set.connect(picture.id, ConstraintSet.LEFT, benchMark, ConstraintSet.RIGHT, 0)
+                    set.connect(cell.id, ConstraintSet.TOP, benchMark, ConstraintSet.TOP, 0)
+                    set.connect(cell.id, ConstraintSet.LEFT, benchMark, ConstraintSet.RIGHT, 0)
                 }
                 set.applyTo(mainView)
-                benchMark = picture.id
+                benchMark = cell.id
             }
             val numSetButton = TextView(this)
             numSetButton.id = 10000 + row
@@ -172,5 +169,4 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     fun colorBackgroundByQadrant(id: Int) = if( viewModel.matrix[id]!!.quadrant % 2 == 0) Color.WHITE else resources.getColor(R.color.colorBackgroundSecond)
-
 }
