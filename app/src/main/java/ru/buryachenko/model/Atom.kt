@@ -1,5 +1,7 @@
 package ru.buryachenko.model
 
+import android.util.Log
+import ru.buryachenko.LOGTAG
 import ru.buryachenko.SIZE
 import java.lang.StringBuilder
 import java.util.*
@@ -31,7 +33,7 @@ data class Atom(val row: Int, val col: Int) {
             if (possible.size == SIZE)
                 tmp = StringBuilder("         ")
             else
-                possible.sortedBy { it }.forEach {tmp = tmp.append("$it")}
+                fullStack().sortedBy { it }.forEach { tmp = tmp.append(if (possible.contains(it)) "$it" else " ") }
             return tmp.toString()
         }
 

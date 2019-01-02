@@ -9,11 +9,11 @@
     </style>
     
     <style name="AppTheme.possibleNumbers">
-        <item name="android:textSize">15sp</item>
         <item name="android:letterSpacing">1.1</item>
         <item name="android:typeface">monospace</item>
         <item name="android:lines">3</item>
-
     </style>
+
+
 
 </resources>
