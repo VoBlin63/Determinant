@@ -6,7 +6,13 @@
     <color name="colorBackgroundFirst">#fbfbf9</color>
     <color name="colorBackgroundSecond">#bebebc</color>
     <color name="colorCellBorder">#646464</color>
-    <color name="colorPossibleNumbers">#000000</color>
+
+    <color name="colorNumberBackground">#484747</color>
+    <color name="colorNumberBorder">#000000</color>
+    <color name="colorNumberTextPossible">#ece9e9</color>
+    <color name="colorNumberTextUnPossible">#2d2b2b</color>
+
+    <color name="colorPossibleNumbers">#030646</color>
     <color name="colorDefinedNumber">#030646</color>
     <color name="colorCursor">#55cf0f</color>
 </resources>

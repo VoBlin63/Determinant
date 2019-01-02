@@ -4,4 +4,7 @@
     <dimen name="cellWidth">35sp</dimen>
     <dimen name="cellCornerRadius">3sp</dimen>
     <dimen name="cellBorderWidth">1sp</dimen>
+    <dimen name="cellNumberCornerRadius">15sp</dimen>
+    <dimen name="cellNumberBorderWidth">1sp</dimen>
+    <dimen name="cellNumberGap">7sp</dimen>
 </resources>

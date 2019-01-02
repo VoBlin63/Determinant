@@ -69,22 +69,23 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             numSetButton.text = " $row"
             numSetButton.textSize = 31F
             numSetButton.setOnClickListener(this)
-            numSetButton.setBackgroundColor(Color.GRAY)
             numbersButton.add(numSetButton)
             mainView.addView(numSetButton)
+            setNumberTextColor(numSetButton, true)
+            numSetButton.setBackgroundResource(R.drawable.number_shape)
             numSetButton.width = resources.getDimensionPixelSize(R.dimen.cellWidth)
             numSetButton.height = resources.getDimensionPixelSize(R.dimen.cellHeight)
             set.clone(mainView)
             set.clear(numSetButton.id, ConstraintSet.TOP)
             set.clear(numSetButton.id, ConstraintSet.LEFT)
             set.connect(numSetButton.id, ConstraintSet.TOP, mainstay!!.id, ConstraintSet.TOP, 0)
-            set.connect(numSetButton.id, ConstraintSet.LEFT, mainstay.id, ConstraintSet.RIGHT, 0)
+            set.connect(numSetButton.id, ConstraintSet.LEFT, mainstay.id, ConstraintSet.RIGHT, resources.getDimensionPixelSize(R.dimen.cellNumberGap))
             set.applyTo(mainView)
         }
         resetButton.setOnClickListener { _ ->
             viewModel.resetAll()
             refreshMatrix()
-            numbersButton.forEach {it.setTextColor(Color.BLACK)}
+            numbersButton.forEach {setNumberTextColor(it, true) }
         }
 
     }
@@ -116,14 +117,14 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 val clickedItem = findViewById<TextView>(clickedCellID)
                 clickedItem.setBackgroundResource(R.drawable.cell_shape_cursor)
                 val possibleNums = viewModel.matrix[id]!!.possible
-                numbersButton.forEach {it.setTextColor(if (possibleNums.contains(it.id - 10000)) Color.BLACK else Color.GRAY)}
+                numbersButton.forEach {setNumberTextColor(it, possibleNums.contains(it.id - 10000))}
             }
         }
         else {
             if (clickedCellID > 0) {
                 viewModel.setNumber(clickedCellID, id-10000)
                 val possibleNums = viewModel.matrix[clickedCellID]!!.possible
-                numbersButton.forEach {it.setTextColor(if (possibleNums.contains(it.id - 10000)) Color.BLACK else Color.GRAY)}
+                numbersButton.forEach {setNumberTextColor(it, possibleNums.contains(it.id - 10000))}
                 refreshMatrix()
             }
         }
@@ -158,8 +159,12 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             refreshMatrix()
         if (clickedCellID > 0) {
             val possibleNums = viewModel.matrix[clickedCellID]!!.possible
-            numbersButton.forEach { it.setTextColor(if (possibleNums.contains(it.id - 10000)) Color.BLACK else Color.GRAY) }
+            numbersButton.forEach { setNumberTextColor(it, possibleNums.contains(it.id - 10000)) }
         }
+    }
+
+    private fun setNumberTextColor(view: TextView, isPossible: Boolean) {
+        view.setTextColor(ResourcesCompat.getColor(resources, if (isPossible) R.color.colorNumberTextPossible else R.color.colorNumberTextUnPossible, null))
     }
 
     private fun setStylePossibleNumbers(view: TextView) {
