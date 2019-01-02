@@ -48,10 +48,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 set.clone(mainView)
                 set.clear(cell.id, ConstraintSet.TOP)
                 set.clear(cell.id, ConstraintSet.LEFT)
-                if (mainstay == null) {
+                if (mainstay == null)
                     //первая ячейка в верхний левый
                     mainstay = cell
-                }
                 else {
                     if (col == 1) {
                         //новая строчка начинается
@@ -131,7 +130,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     }
 
 
-    fun refreshMatrix() {
+    private fun refreshMatrix() {
         var needRefresh = false
         viewModel.matrix.forEach{
             val item = findViewById<TextView>(it.key)
@@ -178,5 +177,5 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         view.setBackgroundResource(shapeByQadrant(view.id))
     }
 
-    fun shapeByQadrant(id: Int) = if( viewModel.matrix[id]!!.quadrant % 2 == 0) R.drawable.cell_shape else R.drawable.cell_shape_cross
+    private fun shapeByQadrant(id: Int) = if( viewModel.matrix[id]!!.quadrant % 2 == 0) R.drawable.cell_shape else R.drawable.cell_shape_cross
 }
