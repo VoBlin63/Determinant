@@ -8,6 +8,7 @@ import android.support.constraint.ConstraintLayout
 import android.support.v7.app.AppCompatActivity
 import android.support.constraint.ConstraintSet
 import android.support.v4.content.res.ResourcesCompat
+import android.text.Layout
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
@@ -33,8 +34,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
         val set = ConstraintSet()
         var mainstay: TextView? = null
-        for (row in 1..SIZE) {
-            for (col in 1..SIZE) {
+        for (row in 1..1) {
+            for (col in 1..1) {
                 val cell = TextView(this)
                 cell.id = makeId(row, col)
                 cell.text = viewModel.matrix[cell.id]!!.possibleStr
@@ -43,15 +44,22 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 cell.setOnLongClickListener {doLongClick(cell)}
                 mainView.addView(cell)
                 cell.setBackgroundResource(shapeByQadrant(cell.id))
-                cell.width = resources.getDimensionPixelSize(R.dimen.cellWidth)
+//                cell.width = resources.getDimensionPixelSize(R.dimen.cellWidth)
+                cell.maxWidth = 5000
                 cell.height = resources.getDimensionPixelSize(R.dimen.cellHeight)
                 set.clone(mainView)
                 set.clear(cell.id, ConstraintSet.TOP)
                 set.clear(cell.id, ConstraintSet.LEFT)
-                if (mainstay == null)
+                set.clear(cell.id, ConstraintSet.RIGHT)
+                if (mainstay == null) {
                     //первая ячейка в верхний левый
+                    set.connect(cell.id, ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START, 0)
+                    set.connect(cell.id, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, 0)
                     mainstay = cell
+                }
                 else {
+                    set.clear(mainstay.id, ConstraintSet.END)
+                    set.connect(mainstay.id, ConstraintSet.END, cell.id, ConstraintSet.START)
                     if (col == 1) {
                         //новая строчка начинается
                         set.connect(cell.id, ConstraintSet.TOP, makeId(row-1,1), ConstraintSet.BOTTOM, 0)
@@ -60,27 +68,29 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                         set.connect(cell.id, ConstraintSet.TOP, mainstay.id, ConstraintSet.TOP, 0)
                         set.connect(cell.id, ConstraintSet.LEFT, mainstay.id, ConstraintSet.RIGHT, 0)
                     }
+                    set.connect(cell.id, ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END, 100)
+
                 }
                 set.applyTo(mainView)
                 mainstay = cell
             }
-            val numSetButton = TextView(this)
-            numSetButton.id = 10000 + row
-            numSetButton.text = " $row"
-            numSetButton.textSize = 31F
-            numSetButton.setOnClickListener(this)
-            numbersButton.add(numSetButton)
-            mainView.addView(numSetButton)
-            setNumberTextColor(numSetButton, true)
-            numSetButton.setBackgroundResource(R.drawable.number_shape)
-            numSetButton.width = resources.getDimensionPixelSize(R.dimen.cellWidth)
-            numSetButton.height = resources.getDimensionPixelSize(R.dimen.cellHeight)
-            set.clone(mainView)
-            set.clear(numSetButton.id, ConstraintSet.TOP)
-            set.clear(numSetButton.id, ConstraintSet.LEFT)
-            set.connect(numSetButton.id, ConstraintSet.TOP, mainstay!!.id, ConstraintSet.TOP, 0)
-            set.connect(numSetButton.id, ConstraintSet.LEFT, mainstay.id, ConstraintSet.RIGHT, resources.getDimensionPixelSize(R.dimen.cellNumberGap))
-            set.applyTo(mainView)
+//            val numSetButton = TextView(this)
+//            numSetButton.id = 10000 + row
+//            numSetButton.text = " $row"
+//            numSetButton.textSize = 31F
+//            numSetButton.setOnClickListener(this)
+//            numbersButton.add(numSetButton)
+//            mainView.addView(numSetButton)
+//            setNumberTextColor(numSetButton, true)
+//            numSetButton.setBackgroundResource(R.drawable.number_shape)
+//            numSetButton.width = resources.getDimensionPixelSize(R.dimen.cellWidth)
+//            numSetButton.height = resources.getDimensionPixelSize(R.dimen.cellHeight)
+//            set.clone(mainView)
+//            set.clear(numSetButton.id, ConstraintSet.TOP)
+//            set.clear(numSetButton.id, ConstraintSet.LEFT)
+//            set.connect(numSetButton.id, ConstraintSet.TOP, mainstay!!.id, ConstraintSet.TOP, 0)
+//            set.connect(numSetButton.id, ConstraintSet.LEFT, mainstay.id, ConstraintSet.RIGHT, resources.getDimensionPixelSize(R.dimen.cellNumberGap))
+//            set.applyTo(mainView)
         }
         resetButton.setOnClickListener { _ ->
             viewModel.resetAll()
